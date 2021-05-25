@@ -1,26 +1,34 @@
 import React from "react";
-import PropTypes from "prop-types";
-import mergeClasses from "helpers/mergeClasses";
 import defaultClasses from "./button.module.css";
+import mergeClasses from "../../helpers/mergeClasses";
 
-const button = (props) => {
+const Button = (props) => {
+  const {
+    type,
+    value,
+    style,
+    id,
+    disabled,
+    autoFocus,
+    onClick,
+    children,
+  } = props;
+
   const classes = mergeClasses(defaultClasses, props.classes);
+
   return (
-    <button type="submit" className={`${classes.button}`} onClick={props.onClick}>
-      {props.children}
+    <button
+      className={classes.root}
+      style={style}
+      type={type}
+      value={value}
+      id={id}
+      onClick={onClick}
+      autoFocus={autoFocus}
+      disabled={disabled}
+    >
+      {children}
     </button>
   );
 };
-
-button.defaultProps = {
-  onClick: () => {},
-  children: "",
-};
-
-button.propTypes = {
-  classes: PropTypes.object,
-  onClick: PropTypes.func,
-  children: PropTypes.node.isRequired,
-};
-
-export default button;
+export default Button;
