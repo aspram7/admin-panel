@@ -139,23 +139,32 @@ const useAddSlider = () => {
   const formik = useFormik({
     initialValues: {
       sliderName: "",
-      sliderNameError: false,
       content: [
         {
           editorValue: "",
           sliderImage: null,
-          editorError: false,
-          imageError: false,
         },
       ],
     },
-    schema,
+    validationSchema: schema,
     onSubmit: (values) => {
-      console.log(values, 88);
+
     },
   });
+
+   const handleAddForm = useCallback(() => {
+
+    formik.values.content.push({
+      editorValue: "",
+      sliderImage: null,
+    })
+  }, [formik]);
+
+
+
   return {
     formik,
+    handleAddForm
   };
 };
 

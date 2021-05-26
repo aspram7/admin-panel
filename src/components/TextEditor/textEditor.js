@@ -11,7 +11,7 @@ const TextEditor = (props) => {
   };
 
   return (
-    <div className={defaultClasses.component}>
+    <div className={defaultClasses.component} id={props.id}>
       {useMemo(
         () => (
           <JoditEditor
