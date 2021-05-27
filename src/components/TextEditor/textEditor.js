@@ -11,12 +11,12 @@ const TextEditor = (props) => {
   };
 
   return (
-    <div className={defaultClasses.component} id={props.id}>
+    <fieldset className={defaultClasses.component} name={props.id}>
       {useMemo(
         () => (
           <JoditEditor
             ref={editor}
-            value={props.content}
+            value={props.value}
             config={config}
             tabIndex={1}
             // onBlur={(newContent) => setContent(newContent)}
@@ -26,7 +26,7 @@ const TextEditor = (props) => {
         []
       )}
       {props.children}
-    </div>
+    </fieldset>
   );
 };
 

@@ -152,19 +152,34 @@ const useAddSlider = () => {
     },
   });
 
-   const handleAddForm = useCallback(() => {
 
-    formik.values.content.push({
-      editorValue: "",
-      sliderImage: null,
-    })
-  }, [formik]);
+    const handleImage = useCallback(
+    (i, file) => {
+      const values = { ...formik.values };
+      values.content[i].sliderImage = file[0].preview.url;
+      formik.setFieldValue(values);
+    },
+    [formik]
+  );
+
+
+    const handleEditorValue = useCallback(
+    (i, e) => {
+      formik.setFieldValue((values) => {
+        values.content[i].editorValue = e;
+        return { ...values };
+      });
+    },
+    [formik]
+  );
+  console.log(formik, 66666666666666)
 
 
 
   return {
     formik,
-    handleAddForm
+    handleImage,
+    handleEditorValue
   };
 };
 
