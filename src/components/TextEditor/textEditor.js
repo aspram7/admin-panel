@@ -11,7 +11,15 @@ const TextEditor = (props) => {
   };
 
   return (
-    <fieldset className={defaultClasses.component} name={props.id}>
+    // <input
+    //   type="text"
+    //   // name={props.name}
+    //   value={props.value}
+    //   onChange={(e) => props.onChange(e.target.value)}
+    //   placeholder="test"
+    //   style={{ border: "1px solid" }}
+    // />
+    <fieldset className={defaultClasses.component} name={props.name}>
       {useMemo(
         () => (
           <JoditEditor
@@ -20,12 +28,13 @@ const TextEditor = (props) => {
             config={config}
             tabIndex={1}
             // onBlur={(newContent) => setContent(newContent)}
+            // onChange={(text) => props.onChange({ target: { name: props.name, value: text } })}
             onChange={props.onChange}
           />
         ),
         []
       )}
-      {props.children}
+      {/* {props.children} */}
     </fieldset>
   );
 };

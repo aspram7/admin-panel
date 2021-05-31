@@ -147,13 +147,10 @@ const useAddSlider = () => {
       ],
     },
     validationSchema: schema,
-    onSubmit: (values) => {
-
-    },
+    onSubmit: (values) => {},
   });
 
-
-    const handleImage = useCallback(
+  const handleImage = useCallback(
     (i, file) => {
       const values = { ...formik.values };
       values.content[i].sliderImage = file[0].preview.url;
@@ -162,8 +159,7 @@ const useAddSlider = () => {
     [formik]
   );
 
-
-    const handleEditorValue = useCallback(
+  const handleEditorValue = useCallback(
     (i, e) => {
       formik.setFieldValue((values) => {
         values.content[i].editorValue = e;
@@ -172,14 +168,11 @@ const useAddSlider = () => {
     },
     [formik]
   );
-  console.log(formik, 66666666666666)
-
-
 
   return {
     formik,
     handleImage,
-    handleEditorValue
+    handleEditorValue,
   };
 };
 
