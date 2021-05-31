@@ -49,17 +49,19 @@ const SliderForm = () => {
                         x
                       </span>
                       <br />
-                      <Field name={`names[${i}]`} style={{ border: "1px solid" }} />
-                      <TextEditor
-                        // name={`content[${i}].editorValue`}
-                        // value={content.editorValue}
-                        // onChange={(event) =>
-                        //   formik.setFieldValue(`content[${i}].editorValue`, event)
-                        // }
+                      {/* <Field name={`names[${i}]`} style={{ border: "1px solid" }} /> */}
+                      <Field name={`names[${i}]`} component={TextEditor} 
+                         />
+                      {/* <TextEditor
+                        name={`content[${i}].editorValue`}
+                        value={content.editorValue}
+                        onChange={(event) =>
+                          formik.setFieldValue(`content[${i}].editorValue`, event)
+                        }
                         name={`names[${i}]`}
                         value={content}
                         onChange={(e) => formikProps.setFieldValue(`names[${i}]`, e)}
-                      />
+                      /> */}
                       {/* <ImageFile
                         onChange={(file) =>
                           formik.setFieldValue(`content[${i}].sliderImage`, file[0].preview.url)
