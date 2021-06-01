@@ -1,80 +1,95 @@
 import React from "react";
-import { Formik, FieldArray, Form, Field } from "formik";
+import { Formik, FieldArray, Form } from "formik";
 import Input from "../components/Input";
 import TextEditor from "../components/TextEditor";
 import ImageFile from "../components/Files";
 import useSlider from "./useSlider";
+import * as Yup from "yup";
+
+let schema = Yup.object().shape({
+  sliderName: Yup.string().required(),
+  content: Yup.array()
+  .of(
+    Yup.object().shape({
+      editorValue: Yup.string().required(),
+      sliderImage: Yup.string().required(),
+    })
+  )
+  .required('Required'),
+});
 
 const SliderForm = () => {
-  const { formik, handleImage, handleEditorValue } = useSlider();
 
   return (
     <Formik
-      onSubmit={(values) => alert(JSON.stringify(values))}
-      // initialValues={formik.values}
-      initialValues={{ names: [] }}
+      onSubmit={(values) => {console.log(values)}}
+      initialValues={{
+      sliderName: "",
+      content: [
+        {
+          editorValue: "",
+          sliderImage: "",
+        },
+      ],
+    }}
+    validationSchema={schema}
       render={(formikProps) => (
         <Form>
           <Input
             name="sliderName"
-            onChange={formik.handleChange}
-            value={formik.values.sliderName}
-          />
+            onChange={formikProps.handleChange}
+            value={formikProps.values.sliderName}
+            error={formikProps.errors.sliderName}
+          ></Input>
           <FieldArray
-            name="names"
+            name="content"
             render={(arrayHelpers) => (
               <div>
                 <span
                   style={{ cursor: "pointer", fontSize: "20px" }}
                   onClick={() => {
-                    // arrayHelpers.push({
-                    //   editorValue: "",
-                    //   sliderImage: null,
-                    // })
-                    arrayHelpers.push("");
+                    arrayHelpers.push({
+                      editorValue: "",
+                      sliderImage: "",
+                    })
                   }}
                 >
                   +
                 </span>
-                {formikProps.values.names.map((content, i) => {
+                {formikProps.values.content.map((content, i) => {
+                  console.log(formikProps );
                   return (
                     <div key={i}>
                       <span
                         style={{ cursor: "pointer", fontSize: "20px" }}
                         onClick={() => {
-                          // console.log(i, 11);
                           arrayHelpers.remove(i);
                         }}
                       >
                         x
                       </span>
                       <br />
-                      {/* <Field name={`names[${i}]`} style={{ border: "1px solid" }} /> */}
-                      <Field name={`names[${i}]`} component={TextEditor} 
-                         />
-                      {/* <TextEditor
+                      <TextEditor
                         name={`content[${i}].editorValue`}
                         value={content.editorValue}
+                        onBlur={formikProps.handleBlur}
                         onChange={(event) =>
-                          formik.setFieldValue(`content[${i}].editorValue`, event)
+                          formikProps.setFieldValue(`content[${i}].editorValue`, event)
                         }
-                        name={`names[${i}]`}
-                        value={content}
-                        onChange={(e) => formikProps.setFieldValue(`names[${i}]`, e)}
-                      /> */}
-                      {/* <ImageFile
+                      >{formikProps.errors.content && formikProps.errors.content[i] ? <div>EditorValue is a required field</div> : null}</TextEditor>
+                      <ImageFile
                         onChange={(file) =>
-                          formik.setFieldValue(`content[${i}].sliderImage`, file[0].preview.url)
+                          formikProps.setFieldValue(`content[${i}].sliderImage`, file[0].preview.url)
                         }
                         placeholder="Add Image"
-                      /> */}
+                      > {formikProps.errors.content && formikProps.errors.content[i] ? <div>SliderImage is a required field</div> : null}</ImageFile>
                     </div>
                   );
                 })}
               </div>
             )}
           ></FieldArray>
-          <button type="submit" disabled={!formik.isValid}>
+          <button type="submit" >
             Submit
           </button>
         </Form>
