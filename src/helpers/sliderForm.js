@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik, FieldArray, Form } from "formik";
 import Input from "../components/Input";
 import TextEditor from "../components/TextEditor";
@@ -9,30 +9,35 @@ import * as Yup from "yup";
 let schema = Yup.object().shape({
   sliderName: Yup.string().required(),
   content: Yup.array()
-  .of(
-    Yup.object().shape({
-      editorValue: Yup.string().required(),
-      sliderImage: Yup.string().required(),
-    })
-  )
-  .required('Required'),
+    .of(
+      Yup.object().shape({
+        editorValue: Yup.string().required(),
+        sliderImage: Yup.string().required(),
+      })
+    )
+    .required("Required"),
 });
 
 const SliderForm = () => {
-
+  const [validateAfterSubmit, setValidateAfterSubmit] = useState(false);
   return (
     <Formik
-      onSubmit={(values) => {console.log(values)}}
+      onSubmit={(values) => {
+        console.log(values);
+        // setValidateAfterSubmit(true);
+      }}
       initialValues={{
-      sliderName: "",
-      content: [
-        {
-          editorValue: "",
-          sliderImage: "",
-        },
-      ],
-    }}
-    validationSchema={schema}
+        sliderName: "",
+        content: [
+          {
+            editorValue: "",
+            sliderImage: "",
+          },
+        ],
+      }}
+      validationSchema={schema}
+      validateOnChange={validateAfterSubmit}
+      // validateOnBlur={false}
       render={(formikProps) => (
         <Form>
           <Input
@@ -51,13 +56,14 @@ const SliderForm = () => {
                     arrayHelpers.push({
                       editorValue: "",
                       sliderImage: "",
-                    })
+                    });
+                    setValidateAfterSubmit(false);
                   }}
                 >
                   +
                 </span>
                 {formikProps.values.content.map((content, i) => {
-                  console.log(formikProps );
+                  console.log(formikProps);
                   return (
                     <div key={i}>
                       <span
@@ -72,24 +78,46 @@ const SliderForm = () => {
                       <TextEditor
                         name={`content[${i}].editorValue`}
                         value={content.editorValue}
-                        onBlur={formikProps.handleBlur}
+                        // onBlur={formikProps.handleBlur}
                         onChange={(event) =>
                           formikProps.setFieldValue(`content[${i}].editorValue`, event)
                         }
-                      >{formikProps.errors.content && formikProps.errors.content[i] ? <div>EditorValue is a required field</div> : null}</TextEditor>
+                      >
+                        {formikProps.errors.content &&
+                        formikProps.errors.content[i] &&
+                        formikProps.errors.content[i].editorValue ? (
+                          <div>EditorValue is a required field</div>
+                        ) : null}
+                      </TextEditor>
                       <ImageFile
                         onChange={(file) =>
-                          formikProps.setFieldValue(`content[${i}].sliderImage`, file[0].preview.url)
+                          formikProps.setFieldValue(
+                            `content[${i}].sliderImage`,
+                            file[0].preview.url
+                          )
                         }
                         placeholder="Add Image"
-                      > {formikProps.errors.content && formikProps.errors.content[i] ? <div>SliderImage is a required field</div> : null}</ImageFile>
+                      >
+                        {" "}
+                        {formikProps.errors.content &&
+                        formikProps.errors.content[i] &&
+                        formikProps.errors.content[i].sliderImage ? (
+                          <div>SliderImage is a required field</div>
+                        ) : null}
+                      </ImageFile>
                     </div>
                   );
                 })}
               </div>
             )}
           ></FieldArray>
-          <button type="submit" >
+          <button
+            type="submit"
+            onClick={() => {
+              setValidateAfterSubmit(true);
+              // formikProps.handleSubmit();
+            }}
+          >
             Submit
           </button>
         </Form>
